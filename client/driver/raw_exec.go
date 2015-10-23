@@ -76,7 +76,7 @@ func (d *RawExecDriver) Start(ctx *ExecContext, task *structs.Task) (DriverHandl
 	// Get the command to be ran
 	command, ok := task.Config["command"]
 	if !ok || command == "" {
-		return nil, fmt.Errorf("missing command for exec driver")
+		return nil, fmt.Errorf("missing command for Raw Exec driver")
 	}
 
 	// Check if an artificat is specified and attempt to download it
@@ -92,13 +92,13 @@ func (d *RawExecDriver) Start(ctx *ExecContext, task *structs.Task) (DriverHandl
 		artifactName := path.Base(source)
 		artifactFile := filepath.Join(destDir, artifactName)
 		if err := getter.GetFile(artifactFile, source); err != nil {
-			return nil, fmt.Errorf("[Err] driver.Exec: Error downloading artifact for Exec driver: %s", err)
+			return nil, fmt.Errorf("Error downloading artifact for Raw Exec driver: %s", err)
 		}
 
 		// Add execution permissions to the newly downloaded artifact
 		if runtime.GOOS != "windows" {
 			if err := syscall.Chmod(artifactFile, 0755); err != nil {
-				log.Printf("[Err] driver.Exec: Error making artifact executable: %s", err)
+				log.Printf("[ERR] driver.raw_exec: Error making artifact executable: %s", err)
 			}
 		}
 	}

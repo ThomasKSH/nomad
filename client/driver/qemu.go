@@ -105,7 +105,7 @@ func (d *QemuDriver) Start(ctx *ExecContext, task *structs.Task) (DriverHandle, 
 	vmID := fmt.Sprintf("qemu-vm-%s-%s", structs.GenerateUUID(), filepath.Base(source))
 	vmPath := filepath.Join(destDir, vmID)
 	if err := getter.GetFile(vmPath, source); err != nil {
-		return nil, fmt.Errorf("Error downloading source for Java driver: %s", err)
+		return nil, fmt.Errorf("Error downloading artifact for Qemu driver: %s", err)
 	}
 
 	// compute and check checksum

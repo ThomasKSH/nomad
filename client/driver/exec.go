@@ -62,20 +62,20 @@ func (d *ExecDriver) Start(ctx *ExecContext, task *structs.Task) (DriverHandle, 
 		// Create a location to download the artifact.
 		taskDir, ok := ctx.AllocDir.TaskDirs[d.DriverContext.taskName]
 		if !ok {
-			return nil, fmt.Errorf("[Err] driver.Exec: Could not find task directory for task: %v", d.DriverContext.taskName)
+			return nil, fmt.Errorf("Could not find task directory for task: %v", d.DriverContext.taskName)
 		}
 		destDir := filepath.Join(taskDir, allocdir.TaskLocal)
 
 		artifactName := path.Base(source)
 		artifactFile := filepath.Join(destDir, artifactName)
 		if err := getter.GetFile(artifactFile, source); err != nil {
-			return nil, fmt.Errorf("[Err] driver.Exec: Error downloading artifact for Exec driver: %s", err)
+			return nil, fmt.Errorf("Error downloading artifact for Exec driver: %s", err)
 		}
 
 		// Add execution permissions to the newly downloaded artifact
 		if runtime.GOOS != "windows" {
 			if err := syscall.Chmod(artifactFile, 0755); err != nil {
-				log.Printf("[Err] driver.Exec: Error making artifact executable: %s", err)
+				log.Printf("[ERR] driver.Exec: Error making artifact executable: %s", err)
 			}
 		}
 	}
