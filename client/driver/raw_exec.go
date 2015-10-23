@@ -109,7 +109,9 @@ func (d *RawExecDriver) Start(ctx *ExecContext, task *structs.Task) (DriverHandl
 	// expand NOMAD_TASK_DIR
 	cmPath, err := args.ParseAndReplace(command, envVars.Map())
 	if err != nil {
-		return nil, fmt.Errorf("error parsing args")
+		return nil, fmt.Errorf("failure to parse arguments in command path: %v", command)
+	} else if len(cmPath) != 1 {
+		return nil, fmt.Errorf("couldn't properly parse command path: %v", command)
 	}
 
 	cm := strings.Join(cmPath, " ")
