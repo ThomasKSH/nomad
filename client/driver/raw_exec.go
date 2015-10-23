@@ -97,7 +97,7 @@ func (d *RawExecDriver) Start(ctx *ExecContext, task *structs.Task) (DriverHandl
 
 		// Add execution permissions to the newly downloaded artifact
 		if runtime.GOOS != "windows" {
-			if err := syscall.Chmod(artifactFile, 0655); err != nil {
+			if err := syscall.Chmod(artifactFile, 0755); err != nil {
 				log.Printf("[Err] driver.Exec: Error making artifact executable: %s", err)
 			}
 		}
