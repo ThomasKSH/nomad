@@ -73,14 +73,13 @@ func (d *RawExecDriver) Start(ctx *ExecContext, task *structs.Task) (DriverHandl
 	}
 	taskLocal := filepath.Join(taskDir, allocdir.TaskLocal)
 
-	// Get the command to be ran, or if omitted, download an artifact for
-	// execution. Currently a supplied command takes precedence, and an artifact
-	// is only downloaded if no command is supplied
+	// Get the command to be ran
 	command, ok := task.Config["command"]
 	if !ok || command == "" {
 		return nil, fmt.Errorf("missing command for exec driver")
 	}
 
+	// Check if an artificat is specified and attempt to download it
 	source, ok := task.Config["artifact_source"]
 	if ok && source != "" {
 		// Proceed to download an artifact to be executed.
@@ -93,7 +92,7 @@ func (d *RawExecDriver) Start(ctx *ExecContext, task *structs.Task) (DriverHandl
 		artifactName := path.Base(source)
 		artifactFile := filepath.Join(destDir, artifactName)
 		if err := getter.GetFile(artifactFile, source); err != nil {
-			return nil, fmt.Errorf("[Err] driver.Exec: Error downloading source for Exec driver: %s", err)
+			return nil, fmt.Errorf("[Err] driver.Exec: Error downloading artifact for Exec driver: %s", err)
 		}
 
 		// Add execution permissions to the newly downloaded artifact
