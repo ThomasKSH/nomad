@@ -103,19 +103,16 @@ func (d *RawExecDriver) Start(ctx *ExecContext, task *structs.Task) (DriverHandl
 		}
 	}
 
-	// expand NOMAD_TASK_DIR
-	ntdMap := make(map[string]string)
-	ntdMap["NOMAD_TASK_DIR"] = allocdir.TaskLocal
+	// Get the environment variables.
+	envVars := TaskEnvironmentVariables(ctx, task)
 
-	cmPath, err := args.ParseAndReplace(command, ntdMap)
+	// expand NOMAD_TASK_DIR
+	cmPath, err := args.ParseAndReplace(command, envVars.Map())
 	if err != nil {
 		return nil, fmt.Errorf("error parsing args")
 	}
 
 	cm := strings.Join(cmPath, " ")
-
-	// Get the environment variables.
-	envVars := TaskEnvironmentVariables(ctx, task)
 
 	// Look for arguments
 	var cmdArgs []string
