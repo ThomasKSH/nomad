@@ -109,7 +109,7 @@ func (c *RunCommand) Run(args []string) int {
 		length = fullId
 	}
 
-	// Check that we got exactly one node
+	// Check that we got exactly one argument
 	args = flags.Args()
 	if len(args) != 1 {
 		c.Ui.Error(c.Help())
